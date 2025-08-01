@@ -1,16 +1,19 @@
-"use client";
+import { cookies } from "next/headers";
+import { createClient } from "@/utils/supabase/server";
 
-import { Button } from "@workspace/ui/components/button";
+export default async function Page() {
+  const cookieStore = cookies();
+  const supabase = await createClient(cookieStore);
 
-export default function Page() {
+  const { data } = await supabase.from("DATA").select("*");
+
   return (
-    <div className="flex items-center justify-center min-h-svh">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <h1 className="text-2xl font-bold">Hello World</h1>
-        <Button size="sm" onClick={() => alert("test")}>
-          Button
-        </Button>
-      </div>
-    </div>
+    <ul>
+      {data?.map((item: any) => (
+        <li key={item.type} className="text-white">
+          {JSON.stringify(item)}
+        </li>
+      ))}
+    </ul>
   );
 }
