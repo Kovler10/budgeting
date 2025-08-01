@@ -9,8 +9,8 @@ export default async function Page() {
 
   return (
     <ul>
-      {data?.map((item: any) => (
-        <li key={item.type} className="text-white">
+      {data?.map((item: any, index: number) => (
+        <li key={`${item.type}-${index}`} className="text-white">
           {JSON.stringify(item)}
         </li>
       ))}
