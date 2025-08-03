@@ -18,11 +18,14 @@ export function useCreateExpense() {
   return useMutation({
     mutationFn: (newExpense: Omit<Expense, "Id">) => createExpense(newExpense),
     onSuccess: (newExpense) => {
-      // Optimistically update the cache
-      queryClient.setQueryData<Expense[]>(EXPENSES_QUERY_KEY, (old) => {
-        if (!old) return [newExpense];
-        return [newExpense, ...old];
-      });
+      // Only update cache if expense was successfully created
+      if (newExpense) {
+        // Optimistically update the cache
+        queryClient.setQueryData<Expense[]>(EXPENSES_QUERY_KEY, (old) => {
+          if (!old) return [newExpense];
+          return [newExpense, ...old];
+        });
+      }
 
       // Refetch to ensure data consistency
       queryClient.invalidateQueries({ queryKey: EXPENSES_QUERY_KEY });
