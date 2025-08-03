@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 
 import "@workspace/ui/globals.css";
 import { Providers } from "@/components/providers";
+import { QueryProvider } from "@/components/query-provider";
 import { ServiceWorkerRegistration } from "@/components/service-worker";
 
 const fontSans = Geist({
@@ -49,7 +50,9 @@ export default function RootLayout({
       <body
         className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <QueryProvider>{children}</QueryProvider>
+        </Providers>
         <ServiceWorkerRegistration />
       </body>
     </html>
