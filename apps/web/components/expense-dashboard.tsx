@@ -18,6 +18,7 @@ import { formatCurrency } from "@/lib/currency";
 import type { Expense } from "@/models";
 import { useExpenses, useCreateExpense } from "@/hooks/use-expenses";
 import { useCategories } from "@/hooks/use-categories";
+import { DashboardSkeleton } from "@/components/dashboard-skeleton";
 
 export function ExpenseDashboard() {
   // Use TanStack Query hooks for data fetching
@@ -129,13 +130,7 @@ export function ExpenseDashboard() {
   };
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto p-4 space-y-6">
-        <div className="flex items-center justify-center h-64">
-          <p className="text-lg text-muted-foreground">Loading...</p>
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (

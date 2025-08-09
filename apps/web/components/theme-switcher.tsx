@@ -29,7 +29,39 @@ export function ThemeSwitcher() {
       variant="outline"
       size="icon"
       className="h-9 w-9"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      onClick={(e) => {
+        const root = document.documentElement;
+        const next = isDark ? "light" : "dark";
+
+        // Click coordinates for radial reveal
+        const x = e.clientX;
+        const y = e.clientY;
+        root.style.setProperty("--theme-x", `${x}px`);
+        root.style.setProperty("--theme-y", `${y}px`);
+
+        // Use View Transitions API if available for a radial background reveal
+        const anyDoc = document as unknown as {
+          startViewTransition?: (cb: () => void) => { finished: Promise<void> };
+        };
+        if (anyDoc.startViewTransition) {
+          const vt = anyDoc.startViewTransition(() => {
+            setTheme(next);
+          });
+          vt.finished.finally(() => {
+            // Cleanup vars just in case
+            root.style.removeProperty("--theme-x");
+            root.style.removeProperty("--theme-y");
+          });
+          return;
+        }
+
+        // Fallback: smooth CSS transition on colors only
+        root.classList.add("color-theme-transition");
+        window.setTimeout(() => {
+          root.classList.remove("color-theme-transition");
+        }, 300);
+        setTheme(next);
+      }}
       title={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
       {isDark ? (
