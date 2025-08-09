@@ -1,20 +1,9 @@
-import { cookies } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
+import { ExpenseDashboard } from "@/components/expense-dashboard";
 
-export default async function Page() {
-  const cookieStore = cookies();
-  const supabase = await createClient(cookieStore);
-
-  console.log("this is a test");
-  const { data } = await supabase.from("DATA").select("*");
-
+export default function Page() {
   return (
-    <ul>
-      {data?.map((item: any, index: number) => (
-        <li key={`${item.type}-${index}`} className="text-white">
-          {JSON.stringify(item)}
-        </li>
-      ))}
-    </ul>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-800 transition-colors duration-300">
+      <ExpenseDashboard />
+    </div>
   );
 }
